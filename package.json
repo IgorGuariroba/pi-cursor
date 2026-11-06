@@ -1,20 +1,19 @@
 {
-  "name": "@rahularya01/pi-cursor",
-  "version": "1.4.39",
-  "description": "Native Cursor provider for Pi Coding Agent (OAuth + Connect/protobuf streamSimple)",
-  "author": "Rahul Arya",
+  "name": "@igor-guari/pi-cursor",
+  "version": "1.4.39-igor.1",
+  "description": "Native Cursor provider for Pi (fork of @rahularya01/pi-cursor with frame-buffer and Auto variant fixes)",
+  "author": "Igor Guariroba",
+  "contributors": [
+    "Rahul Arya (original author, https://github.com/Rahularya01/pi-cursor)"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Rahularya01/pi-cursor.git"
+    "url": "git+https://github.com/IgorGuariroba/pi-cursor.git"
   },
-  "homepage": "https://github.com/Rahularya01/pi-cursor#readme",
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/Rahularya01"
-  },
+  "homepage": "https://github.com/IgorGuariroba/pi-cursor#readme",
   "bugs": {
-    "url": "https://github.com/Rahularya01/pi-cursor/issues"
+    "url": "https://github.com/IgorGuariroba/pi-cursor/issues"
   },
   "type": "module",
   "main": "./dist/index.js",

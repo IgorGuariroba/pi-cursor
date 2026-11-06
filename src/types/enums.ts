@@ -1,5 +1,5 @@
 /**
- * Domain enums for @rahularya01/pi-cursor.
+ * Domain enums for @igor-guari/pi-cursor (fork of @rahularya01/pi-cursor).
  *
  * Strongly-typed TypeScript enums for provider constants, credentials,
  * reasoning levels, transport states, and drift signals.
@@ -98,5 +98,5 @@ export enum ConnectFlag {
 export enum ProviderConstant {
   ProviderId = "cursor",
   NativeApi = "cursor-native",
-  Source = "@rahularya01/pi-cursor",
+  Source = "@igor-guari/pi-cursor",
 }

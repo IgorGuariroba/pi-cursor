@@ -1,8 +1,38 @@
-# @rahularya01/pi-cursor
+# @igor-guari/pi-cursor
 
-[![npm version](https://img.shields.io/npm/v/@rahularya01/pi-cursor?logo=npm)](https://www.npmjs.com/package/@rahularya01/pi-cursor)
-[![license](https://img.shields.io/npm/l/@rahularya01/pi-cursor)](LICENSE)
-[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?logo=github)](https://github.com/sponsors/Rahularya01)
+Fork of [`@rahularya01/pi-cursor`](https://github.com/Rahularya01/pi-cursor) (MIT) with fixes found while
+benchmarking Pi against the Cursor CLI on the same model. Everything else is upstream, unchanged.
+
+## What this fork changes
+
+| Fix | Symptom upstream | Effect measured |
+| :-- | :-- | :-- |
+| **Partial Connect frames kept across tool-call resumes** (`src/client/bridge.ts`) | `Connect message exceeds 67108864 bytes` (`framesParsedBeforeDesync: 0`) mid-turn; recovery replays the whole history and the model re-reasons | Happened in 3 of 4 runs, 50–245 s lost each; 0 after the fix |
+| **Auto variants selectable** (`src/models/parameterized.ts`) | Cursor's Auto picker (Intelligence / Balance / Cost) collapsed into one `auto-smart` row; `cursor/auto` sends the legacy `default` model, not what the Cursor CLI uses | New models `cursor/auto-smart-cost`, `cursor/auto-smart-balanced`, `cursor/auto-smart-intelligence` (+ `-max-mode-*`). `cursor/auto-smart` stays on Cursor's default (Balance) |
+
+To run the same model as `agent --model auto` with the Cursor CLI (Auto Cost by default), use
+`--model cursor/auto-smart-cost`.
+
+### Install
+
+Replace the upstream package; both register the `cursor` provider, so do not keep both enabled.
+
+```bash
+pi uninstall npm:@rahularya01/pi-cursor
+pi install git:github.com/IgorGuariroba/pi-cursor@v1.4.39-igor.1   # or a local checkout: pi install ./pi-cursor-fork
+```
+
+### Rebasing on a new upstream release
+
+```bash
+git fetch upstream --tags
+git rebase --onto vX.Y.Z v1.4.39 <fork-branch>
+yarn check && yarn build
+```
+
+---
+
+The rest of this README is the upstream documentation.
 
 Use your **Cursor** subscription's models — Composer, Claude, GPT, Grok — inside the **Pi Coding Agent**.
 `pi-cursor` plugs in a `cursor` model provider that talks to Cursor's own backend directly (native

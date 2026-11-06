@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.39-igor.1 (fork)
+
+- fix(client): keep partial Connect frames across tool-call resumes (no more `Connect message exceeds 67108864 bytes` desync mid-turn).
+- fix(models): expose `auto-smart` `optimize_for` variants as `auto-smart-cost`, `auto-smart-balanced`, `auto-smart-intelligence` (+ max-mode twins).
+- chore: publish as `@igor-guari/pi-cursor`.
+
 ## [Unreleased]
 
 ## [1.4.39] - 2026-10-08
