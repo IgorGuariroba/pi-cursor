@@ -42,7 +42,9 @@ describe("auto-smart optimize_for variants", () => {
   it("exposes one selectable row per optimize_for value", () => {
     const byId = new Map(nonMaxAutoRows().map((model) => [model.id, model]));
 
-    expect(byId.get("auto-smart-cost")?.parameters).toEqual([{ id: "optimize_for", value: "cost" }]);
+    expect(byId.get("auto-smart-cost")?.parameters).toEqual([
+      { id: "optimize_for", value: "cost" },
+    ]);
     expect(byId.get("auto-smart-balanced")?.parameters).toEqual([
       { id: "optimize_for", value: "balanced" },
     ]);

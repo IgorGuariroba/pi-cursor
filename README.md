@@ -5,10 +5,10 @@ benchmarking Pi against the Cursor CLI on the same model. Everything else is ups
 
 ## What this fork changes
 
-| Fix | Symptom upstream | Effect measured |
-| :-- | :-- | :-- |
-| **Partial Connect frames kept across tool-call resumes** (`src/client/bridge.ts`) | `Connect message exceeds 67108864 bytes` (`framesParsedBeforeDesync: 0`) mid-turn; recovery replays the whole history and the model re-reasons | Happened in 3 of 4 runs, 50–245 s lost each; 0 after the fix |
-| **Auto variants selectable** (`src/models/parameterized.ts`) | Cursor's Auto picker (Intelligence / Balance / Cost) collapsed into one `auto-smart` row; `cursor/auto` sends the legacy `default` model, not what the Cursor CLI uses | New models `cursor/auto-smart-cost`, `cursor/auto-smart-balanced`, `cursor/auto-smart-intelligence` (+ `-max-mode-*`). `cursor/auto-smart` stays on Cursor's default (Balance) |
+| Fix                                                                               | Symptom upstream                                                                                                                                                       | Effect measured                                                                                                                                                                |
+| :-------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Partial Connect frames kept across tool-call resumes** (`src/client/bridge.ts`) | `Connect message exceeds 67108864 bytes` (`framesParsedBeforeDesync: 0`) mid-turn; recovery replays the whole history and the model re-reasons                         | Happened in 3 of 4 runs, 50–245 s lost each; 0 after the fix                                                                                                                   |
+| **Auto variants selectable** (`src/models/parameterized.ts`)                      | Cursor's Auto picker (Intelligence / Balance / Cost) collapsed into one `auto-smart` row; `cursor/auto` sends the legacy `default` model, not what the Cursor CLI uses | New models `cursor/auto-smart-cost`, `cursor/auto-smart-balanced`, `cursor/auto-smart-intelligence` (+ `-max-mode-*`). `cursor/auto-smart` stays on Cursor's default (Balance) |
 
 To run the same model as `agent --model auto` with the Cursor CLI (Auto Cost by default), use
 `--model cursor/auto-smart-cost`.

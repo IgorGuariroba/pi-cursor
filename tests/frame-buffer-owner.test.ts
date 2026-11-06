@@ -42,8 +42,14 @@ describe("createConnectFrameParser owner buffer", () => {
 
   it("desyncs without an owner (the upstream bug this guards against)", () => {
     const frame = frameConnectMessage(payload("x".repeat(64)));
-    createConnectFrameParser(() => {}, () => {})(frame.subarray(0, 9));
-    const fresh = createConnectFrameParser(() => {}, () => {});
+    createConnectFrameParser(
+      () => {},
+      () => {},
+    )(frame.subarray(0, 9));
+    const fresh = createConnectFrameParser(
+      () => {},
+      () => {},
+    );
     // The tail is read as a frame header with an absurd declared length.
     expect(() => fresh(frame.subarray(9))).toThrow(/Connect message exceeds/);
   });
@@ -51,7 +57,11 @@ describe("createConnectFrameParser owner buffer", () => {
   it("starts clean after resetConnectFrameBuffer (new Connect stream)", () => {
     const owner = {};
     const stale = frameConnectMessage(payload("stale"));
-    createConnectFrameParser(() => {}, () => {}, { owner })(stale.subarray(0, 7));
+    createConnectFrameParser(
+      () => {},
+      () => {},
+      { owner },
+    )(stale.subarray(0, 7));
 
     resetConnectFrameBuffer(owner);
 
