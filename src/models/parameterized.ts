@@ -340,30 +340,86 @@ export function modelsFromParameterizedMetadata(
       groups.set(key, group);
     }
 
+    const modelRows: Array<{ row: CursorModel; variant: CursorParameterizedVariant }> = [];
     for (const group of groups.values()) {
       const first = group.variants[0];
       if (!first) continue;
-      rows.push(
-        ...buildParameterizedRowsFromGroup({
-          model,
-          variants: group.variants,
-          requestedMaxMode: first.isMaxMode,
-          effortParameterId: group.effortParameterId,
-        }),
-      );
-      if (shouldGenerateSyntheticMaxRows(model, first)) {
-        rows.push(
-          ...buildParameterizedRowsFromGroup({
+      const tag = (built: CursorModel[]) =>
+        built.map((row) => ({ row, variant: variantForRow(group.variants, row) ?? first }));
+      modelRows.push(
+        ...tag(
+          buildParameterizedRowsFromGroup({
             model,
             variants: group.variants,
-            requestedMaxMode: true,
+            requestedMaxMode: first.isMaxMode,
             effortParameterId: group.effortParameterId,
           }),
+        ),
+      );
+      if (shouldGenerateSyntheticMaxRows(model, first)) {
+        modelRows.push(
+          ...tag(
+            buildParameterizedRowsFromGroup({
+              model,
+              variants: group.variants,
+              requestedMaxMode: true,
+              effortParameterId: group.effortParameterId,
+            }),
+          ),
         );
       }
     }
+    rows.push(...disambiguateCollidingRows(modelRows));
   }
   return rows;
+}
+
+/** Parameters already encoded in a row id by `buildParameterizedRowsFromGroup`. */
+const ID_ENCODED_PARAMETERS = new Set(["context", "fast", "thinking", "reasoning", "effort"]);
+
+function variantForRow(
+  variants: CursorParameterizedVariant[],
+  row: CursorModel,
+): CursorParameterizedVariant | undefined {
+  const key = normalizeParameterValues(row.parameters ?? []);
+  return variants.find((variant) => normalizeParameterValues(variant.parameters) === key);
+}
+
+/**
+ * Some parameterized models differ only by a parameter the id builder does not encode — e.g.
+ * `auto-smart` exposes `optimize_for=intelligence|balanced|cost` (Cursor's "Auto Intelligence /
+ * Balance / Cost" picker). Every variant then mapped to the same id and the catalog kept only
+ * one of them, so the user could not choose. Only colliding rows are renamed, so ids of models
+ * that never collided stay stable.
+ */
+function disambiguateCollidingRows(
+  entries: Array<{ row: CursorModel; variant: CursorParameterizedVariant }>,
+): CursorModel[] {
+  const counts = new Map<string, number>();
+  for (const { row } of entries) counts.set(row.id, (counts.get(row.id) ?? 0) + 1);
+  return entries.flatMap(({ row, variant }) => {
+    if ((counts.get(row.id) ?? 0) < 2) return [row];
+    const extras = (row.parameters ?? []).filter(
+      (parameter) => !ID_ENCODED_PARAMETERS.has(parameter.id),
+    );
+    if (extras.length === 0) return [row];
+    // Keep the original id on Cursor's default variant so saved model ids keep working.
+    const isDefault = row.requestedMaxMode
+      ? variant.isDefaultMaxConfig === true
+      : variant.isDefaultNonMaxConfig === true;
+    const suffix = extras
+      .map((parameter) => parameter.value.toLowerCase().replace(/[^a-z0-9.]+/g, "-"))
+      .join("-");
+    const label = variant.displayName?.trim();
+    const renamed: CursorModel = {
+      ...row,
+      id: `${row.id}-${suffix}`,
+      name: label
+        ? `${label}${row.requestedMaxMode ? " Max Mode" : ""}`
+        : `${row.name} ${extras.map((parameter) => parameter.value).join(" ")}`,
+    };
+    return isDefault ? [row, renamed] : [renamed];
+  });
 }
 
 export function normalizeDisplayModel(model: CursorModel): CursorModel {
