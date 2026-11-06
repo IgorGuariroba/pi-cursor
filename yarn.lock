@@ -970,6 +970,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@igor-guari/pi-cursor@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@igor-guari/pi-cursor@workspace:."
+  dependencies:
+    "@bufbuild/buf": "npm:1.72.0"
+    "@bufbuild/protobuf": "npm:2.13.0"
+    "@bufbuild/protoc-gen-es": "npm:2.13.0"
+    "@earendil-works/pi-ai": "npm:0.84.2"
+    "@earendil-works/pi-coding-agent": "npm:0.84.2"
+    "@eslint/js": "npm:^10.0.1"
+    "@types/node": "npm:^26.1.1"
+    "@vitest/coverage-v8": "npm:^4.1.11"
+    eslint: "npm:^10.7.0"
+    eslint-config-prettier: "npm:^10.1.8"
+    globals: "npm:^17.7.0"
+    prettier: "npm:^3.9.5"
+    tsup: "npm:^8.5.0"
+    tsx: "npm:^4.20.5"
+    typescript: "npm:^6.0.3"
+    typescript-eslint: "npm:^8.64.0"
+    vitest: "npm:^4.1.11"
+  peerDependencies:
+    "@earendil-works/pi-ai": ">=0.80.0"
+    "@earendil-works/pi-coding-agent": ">=0.80.0"
+  languageName: unknown
+  linkType: soft
+
 "@isaacs/fs-minipass@npm:^4.0.0":
   version: 4.0.1
   resolution: "@isaacs/fs-minipass@npm:4.0.1"
@@ -1226,33 +1253,6 @@ __metadata:
   checksum: 10c0/975c6e2c0319bd50c17531d186b537a88cb4d3205e3ca9297cd842b631d341da0ee3ff16be8656cd2660756dc753b29c8a6a14c0ad8ed602c1f91ddf22e7b3f3
   languageName: node
   linkType: hard
-
-"@rahularya01/pi-cursor@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@rahularya01/pi-cursor@workspace:."
-  dependencies:
-    "@bufbuild/buf": "npm:1.72.0"
-    "@bufbuild/protobuf": "npm:2.13.0"
-    "@bufbuild/protoc-gen-es": "npm:2.13.0"
-    "@earendil-works/pi-ai": "npm:0.84.2"
-    "@earendil-works/pi-coding-agent": "npm:0.84.2"
-    "@eslint/js": "npm:^10.0.1"
-    "@types/node": "npm:^26.1.1"
-    "@vitest/coverage-v8": "npm:^4.1.11"
-    eslint: "npm:^10.7.0"
-    eslint-config-prettier: "npm:^10.1.8"
-    globals: "npm:^17.7.0"
-    prettier: "npm:^3.9.5"
-    tsup: "npm:^8.5.0"
-    tsx: "npm:^4.20.5"
-    typescript: "npm:^6.0.3"
-    typescript-eslint: "npm:^8.64.0"
-    vitest: "npm:^4.1.11"
-  peerDependencies:
-    "@earendil-works/pi-ai": ">=0.80.0"
-    "@earendil-works/pi-coding-agent": ">=0.80.0"
-  languageName: unknown
-  linkType: soft
 
 "@rolldown/binding-android-arm-eabi@npm:1.2.9":
   version: 1.2.9
