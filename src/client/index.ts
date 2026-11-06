@@ -1,6 +1,7 @@
 export {
   spawnBridge,
   createConnectFrameParser,
+  resetConnectFrameBuffer,
   frameConnectMessage,
   parseConnectEndStream,
   type BridgeHandle,

@@ -18,6 +18,7 @@ import {
 } from "../proto/agent_pb.js";
 import {
   frameConnectMessage,
+  resetConnectFrameBuffer,
   spawnBridge,
   type BridgeFactory,
   type BridgeHandle,
@@ -152,6 +153,8 @@ export function startBridge(
   let bridge;
   if (reused) {
     debugLog("bridge.reuse_idle", { bridgeKey: options?.bridgeKey });
+    // New Connect stream: partial-frame bytes from the previous stream are not part of it.
+    resetConnectFrameBuffer(reused);
     reused.openStream!(accessToken);
     reused.write(frameConnectMessage(requestBytes));
     bridge = reused;

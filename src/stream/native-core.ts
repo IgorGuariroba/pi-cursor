@@ -1397,6 +1397,7 @@ function writeNativeStream(
         writer.error(enhanced, "error", state);
       }
     },
+    { owner: bridge },
   );
 
   bridge.onData((chunk) => {

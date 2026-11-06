@@ -161,11 +161,31 @@ export interface ConnectFrameDesyncDiagnostics {
   trailingContextHex: string;
 }
 
+/**
+ * Pending (partial-frame) bytes per bridge. A tool-call resume builds a new parser on the same
+ * HTTP/2 stream; if the previous parser was holding the first half of a frame, a fresh
+ * accumulator would read the second half as a header and desync ("Connect message exceeds …").
+ * Keying the accumulator by bridge keeps partial bytes across parsers of one stream.
+ */
+const frameBuffersByOwner = new WeakMap<object, FrameAccumulator>();
+
+/** Drop buffered partial-frame bytes for `owner`. Call when a new Connect stream is opened on it. */
+export function resetConnectFrameBuffer(owner: object): void {
+  frameBuffersByOwner.delete(owner);
+}
+
 export function createConnectFrameParser(
   onMessage: (bytes: Uint8Array) => void,
   onEndStream: (bytes: Uint8Array) => void,
+  options: { owner?: object } = {},
 ): (incoming: Buffer) => void {
-  const pending = new FrameAccumulator();
+  let pending: FrameAccumulator;
+  if (options.owner) {
+    pending = frameBuffersByOwner.get(options.owner) ?? new FrameAccumulator();
+    frameBuffersByOwner.set(options.owner, pending);
+  } else {
+    pending = new FrameAccumulator();
+  }
   let bytesConsumed = 0;
   let framesParsed = 0;
   return (incoming: Buffer) => {
